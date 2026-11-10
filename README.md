@@ -17,6 +17,10 @@ WebGL scene built from a Blender-authored `.glb`; the bottom half is a telemetry
 driven by the **same** 560-frame kinematic sidecar, so every number on screen is a function of
 where the train physically is on the track — not a canned animation.
 
+| ![Orbit](screenshots/00-hero-orbit.png) |
+|:---:|
+| *The full cockpit: live WebGL stage above, 560-frame telemetry deck below* |
+
 | ![Orbit](screenshots/01-orbit-slow-climb.png) |
 |:---:|
 | *Orbit 3D — the 45° chain lift, catwalk and A-frame support towers* |
