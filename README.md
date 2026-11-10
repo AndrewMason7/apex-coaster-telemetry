@@ -14,13 +14,13 @@
 [![design.md](https://img.shields.io/badge/%40google%2Fdesign.md-0_errors_0_warnings-10B981?style=flat-square)](#design-system)
 [![License](https://img.shields.io/badge/license-MIT-F59E0B?style=flat-square)](LICENSE)
 
-[![faces](https://img.shields.io/badge/geometry-83%2C833_faces-8B5CF6?style=flat-square)](#track-geometry)
+[![faces](https://img.shields.io/badge/geometry-188%2C272_tris-8B5CF6?style=flat-square)](#track-geometry)
 [![frames](https://img.shields.io/badge/telemetry-560_frames-06B6D4?style=flat-square)](#how-it-works)
 [![cars](https://img.shields.io/badge/train-5_articulated_cars-F43F5E?style=flat-square)](#how-it-works)
-[![cameras](https://img.shields.io/badge/cameras-4_modes-F59E0B?style=flat-square)](#controls)
+[![cameras](https://img.shields.io/badge/cameras-3_modes-F59E0B?style=flat-square)](#controls)
 [![build](https://img.shields.io/badge/build-none_%E2%80%94_plain_HTML-10B981?style=flat-square)](#run-it)
 
-`83,833 faces` · `196,088 triangles` · `560 telemetry frames` · `5 articulated cars` · `4 camera modes` · `banked 3D spline`
+`188,272 triangles` · `560 telemetry frames` · `5 articulated cars` · `3 camera modes` · `7 numbers on screen`
 
 </div>
 
@@ -28,10 +28,13 @@
 
 > *"The slow climb is half the fun, and the other half is the part where nobody can breathe."*
 
-APEX is a split-screen instrument panel for a fictional hyper-coaster. The top half is a real
-WebGL scene built from a Blender-authored `.glb`; the bottom half is a telemetry deck. Both are
-driven by the **same** 560-frame kinematic sidecar, so every number on screen is a function of
+APEX is a 3D-first page for a fictional hyper-coaster. The scene is built from a Blender-authored
+`.glb` and takes roughly two thirds of the viewport; underneath it sit four numbers and a timeline.
+Everything is driven by the **same** 560-frame kinematic sidecar, so each readout is a function of
 where the train physically is on the track — not a canned animation.
+
+The page deliberately carries **seven values, not seventy**. The density is the design: a big
+stage, one altitude, four stats, a phase name and a clock.
 
 | ![Orbit](screenshots/00-hero-orbit.png) |
 |:---:|
@@ -77,7 +80,7 @@ blender/build_coaster.py
       │  28 control points → periodic Catmull-Rom spline
       │  → 560 samples of position + tangent + banked side + normal
       │
-      ├──► assets/apex_coaster.glb        (83,833 faces, 196,088 tris, 17 objects, 27 PBR materials)
+      ├──► assets/apex_coaster.glb        (83,833 faces → 188,272 triangles, 17 objects, 27 PBR materials)
       └──► assets/apex_telemetry.json     (560 frames × kinematics + biometrics)
                     │
                     ▼
@@ -135,13 +138,11 @@ across the file protocol.
 | Control | Effect |
 |---|---|
 | Drag the 3D stage | Orbit the camera (theta / phi) |
-| `ORBIT 3D` | Free orbit around the track |
-| `RIDER POV` | Eye point on the lead car, camera up-vector follows the bank |
-| `SIDE PROFILE` | Fixed lateral orthographic-ish view |
-| `CHASE CAM` | Trail offset from the previous spline sample |
-| `LIVE PAUSE` | Freeze the simulation |
-| Timeline scrubber | Click anywhere to jump the train and every readout to that frame |
-| Phase matrix rows | Click a block to seek to that phase |
+| `ORBIT` | Free orbit (drag the stage to rotate) |
+| `RIDER` | Eye point on the lead car, camera up-vector follows the bank |
+| `CHASE` | 10.5 m behind, 4.6 m up, looking past the consist |
+| *side profile* | Deep-link only: `?cam=SIDE` |
+| Timeline strip | Click anywhere to jump the train and every readout to that frame |
 
 The page also exposes a deterministic hook for headless capture:
 
@@ -205,7 +206,7 @@ why the deck and the track read as one instrument rather than two pasted halves.
 .
 ├── index.html                     # the whole app
 ├── assets/
-│   ├── apex_coaster.glb           # 83,833-face Blender export (196k tris, 6.3 MB)
+│   ├── apex_coaster.glb           # 83,833 faces → 188,272 triangles, 6.3 MB
 │   └── apex_telemetry.json        # 560-frame kinematic + biometric sidecar
 ├── design/
 │   ├── DESIGN.md                  # design tokens (lint-clean)
