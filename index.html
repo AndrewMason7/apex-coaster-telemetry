@@ -722,9 +722,12 @@ fetch('./assets/apex_telemetry.json')
 <span id="breath-val" class="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl text-[#ffb2b7] tracking-tighter leading-none tabular-nums">0.0</span>
 <span class="font-mono text-xs md:text-sm text-[#F43F5E] font-bold tracking-tight">L/min</span>
 </div>
-<div class="font-mono text-[11px] md:text-xs text-rose-400/90 italic tracking-tight truncate">
+<div id="breath-note" class="font-mono text-[11px] md:text-xs text-rose-400/90 italic tracking-tight truncate">
           can't breathe up here
         </div>
+<div class="w-full h-1 bg-white/[0.04] rounded-full overflow-hidden mt-2">
+<div id="bar-breath" class="h-full bg-[#F43F5E] rounded-full transition-[width] duration-150" style="width:2%"></div>
+</div>
 </div>
 </div>
 </footer>
