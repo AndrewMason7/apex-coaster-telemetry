@@ -263,7 +263,7 @@ let height = container.clientHeight || 491;
 
 const BG = 0x0b111a;
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(BG, 0.0094);
+scene.fog = new THREE.FogExp2(BG, 0.0076);
 
 // studio cyclorama: dark gradient backdrop so the structure separates from the void
 function backdropTexture() {
@@ -299,7 +299,7 @@ const PIXEL_RATIO = Number.isFinite(DPR_OVERRIDE)
   : Math.min(window.devicePixelRatio || 1, 1.75);
 renderer.setPixelRatio(PIXEL_RATIO);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.45;
+renderer.toneMappingExposure = 1.58;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
@@ -368,10 +368,10 @@ pmrem.dispose();
 // ---------------------------------------------------------------------------
 // Lighting: one shadow-casting key, cool fill, cold rim, faint bounce
 // ---------------------------------------------------------------------------
-const hemi = new THREE.HemisphereLight(0x35506f, 0x070a10, 0.55);
+const hemi = new THREE.HemisphereLight(0x54749c, 0x121924, 0.86);
 scene.add(hemi);
 
-const key = new THREE.DirectionalLight(0xfff2e2, 5.6);
+const key = new THREE.DirectionalLight(0xfff4e8, 6.1);
 key.position.set(26, 15.5, 21);
 key.castShadow = true;
 key.shadow.mapSize.set(2048, 2048);
@@ -389,11 +389,11 @@ scene.add(key);
 scene.add(key.target);
 key.target.position.set(0, 4.0, -0.5);
 
-const fill = new THREE.DirectionalLight(0x5386ff, 0.62);
+const fill = new THREE.DirectionalLight(0x5386ff, 0.95);
 fill.position.set(-24, 13, -13);
 scene.add(fill);
 
-const rim = new THREE.DirectionalLight(0xc9ecff, 3.4);
+const rim = new THREE.DirectionalLight(0xc9ecff, 3.7);
 rim.position.set(-12, 13, -30);
 scene.add(rim);
 
@@ -414,7 +414,7 @@ function groundMaps() {
   const c = document.createElement('canvas');
   c.width = c.height = S;
   const g = c.getContext('2d');
-  g.fillStyle = '#1b2029';
+  g.fillStyle = '#222834';
   g.fillRect(0, 0, S, S);
 
   // slab tone variation
@@ -830,12 +830,23 @@ function applyCamera(sample) {
     camera.position.set(sample.pos.x * 0.55, 7.9, 25.5);
     camera.lookAt(sample.pos.x * 0.55, 5.7, 0);
   } else if (cameraMode === 'CHASE_CAM') {
-    camera.fov = 46;
-    const trailSample = sampleTelemetry((progress - 0.05 + 1.0) % 1.0);
-    const chasePos = trailSample.pos.clone().add(trailSample.up.clone().multiplyScalar(2.05)).add(trailSample.side.clone().multiplyScalar(1.15));
+    camera.fov = 56;
+    // Sit genuinely behind and above the consist so the track it just rode and the
+    // structure ahead are both in frame — a camera parked 2 m over the train's own
+    // tail only ever sees the train against a black void.
+    const trailSample = sampleTelemetry((progress - 0.055 + 1.0) % 1.0);
+    const backOff = trailSample.tan.clone().multiplyScalar(-10.5);
+    const chasePos = trailSample.pos.clone()
+      .add(backOff)
+      .add(trailSample.up.clone().multiplyScalar(4.6))
+      .add(trailSample.side.clone().multiplyScalar(3.1));
     camera.position.copy(chasePos);
     camera.up.set(0, 1, 0);
-    camera.lookAt(sample.pos.clone().add(sample.up.clone().multiplyScalar(0.55)));
+    // look past the train, not at it, so the rail runs away from the lens
+    const lookAhead = sample.pos.clone()
+      .add(sample.tan.clone().multiplyScalar(6.5))
+      .add(sample.up.clone().multiplyScalar(0.35));
+    camera.lookAt(lookAhead);
   }
   camera.updateProjectionMatrix();
 }
