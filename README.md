@@ -14,13 +14,13 @@
 [![design.md](https://img.shields.io/badge/%40google%2Fdesign.md-0_errors_0_warnings-10B981?style=flat-square)](#design-system)
 [![License](https://img.shields.io/badge/license-MIT-F59E0B?style=flat-square)](LICENSE)
 
-[![faces](https://img.shields.io/badge/geometry-44%2C386_faces-8B5CF6?style=flat-square)](#track-geometry)
+[![faces](https://img.shields.io/badge/geometry-83%2C833_faces-8B5CF6?style=flat-square)](#track-geometry)
 [![frames](https://img.shields.io/badge/telemetry-560_frames-06B6D4?style=flat-square)](#how-it-works)
 [![cars](https://img.shields.io/badge/train-5_articulated_cars-F43F5E?style=flat-square)](#how-it-works)
 [![cameras](https://img.shields.io/badge/cameras-4_modes-F59E0B?style=flat-square)](#controls)
 [![build](https://img.shields.io/badge/build-none_%E2%80%94_plain_HTML-10B981?style=flat-square)](#run-it)
 
-`44,386 faces` · `560 telemetry frames` · `5 articulated cars` · `4 camera modes` · `banked 3D spline`
+`83,833 faces` · `196,088 triangles` · `560 telemetry frames` · `5 articulated cars` · `4 camera modes` · `banked 3D spline`
 
 </div>
 
@@ -77,11 +77,11 @@ blender/build_coaster.py
       │  28 control points → periodic Catmull-Rom spline
       │  → 560 samples of position + tangent + banked side + normal
       │
-      ├──► assets/apex_coaster.glb        (44,386 faces, 12 objects, 5-material track)
+      ├──► assets/apex_coaster.glb        (83,833 faces, 196,088 tris, 17 objects, 27 PBR materials)
       └──► assets/apex_telemetry.json     (560 frames × kinematics + biometrics)
                     │
                     ▼
-            index.html  ── Three.js r170 + PMREM env map + UnrealBloom
+            index.html  ── Three.js r170 + PMREM studio env + shadow map + selective bloom
                     │
                     └──► bottom deck: every card is bound to the frame index
 ```
@@ -105,13 +105,16 @@ articulates around crests exactly like a real train.
 
 | Component | Detail |
 |---|---|
-| Track spine | 4-tube B&M/Intamin-style box truss: glowing phase spine, two lower chords, two polished running rails |
-| Cross-ties | Y-ribs + Warren diagonal lacing every 2 samples (~6,200 ties) |
-| Support towers | A-frame dual-leg above 7.5 m with cross-bracing, monopile + concrete pier below |
-| Catwalk | 126 samples of handrail, deck rail and chain trough along the lift hill |
-| Tunnel portals | 5 emissive rings at the base of the plunge trench |
-| Beacons | Aviation warning spheres on the crest, tip-over lip and loop apex |
-| Train | Lead car with nose cone + 4 trailing cars, bucket seats, OTSR bars, 3-wheel bogies |
+| Track spine | 0.17 × 0.40 m chamfered box girder swept on the banked frame, painted per phase, with proud splice bands every 6 m |
+| Running rails | Two 16-sided polished steel tubes (r 52 mm) with worn contact strips and adjustable clamp blocks bolted through every tie |
+| Crossties | Chamfered steel plates every ~0.86 m, four hex bolts + gusset plates per tie, Warren diagonal rods down to the delta chords |
+| Delta chords | Two 10-sided galvanised lower tubes carrying the truss load path |
+| Support towers | Lattice A-frames: 190 mm chamfered legs, three rungs, X-bracing with gussets, bolted saddle clamps, 860 mm chamfered concrete footings |
+| Chain lift | Twin-plate chain trough, alternating link plates on a 0.30 m pitch, drive sprocket and housing at the lift base |
+| Catwalk | Lift-hill grating with slats, twin handrails, posts every ~1.5 m and a toe board |
+| Station | Platform deck with nosing and tactile strip, canopy on 215 mm columns, roof purlins, glazed building, extruded `APEX` fascia lettering, queue rails |
+| Ground kit | Floodlight masts with fixtures, sensor gantries with emissive strips, barriers, crates, cable reel, maintenance ladder |
+| Train | Sculpted lofted shell with nose, windscreen, side pods, headrest fairings, OTSR tubes, lap bars, spoiler, bogie side plates, road/upstop/side-friction wheels with flanges and LED trim |
 
 ---
 
@@ -145,7 +148,18 @@ The page also exposes a deterministic hook for headless capture:
 ```js
 window.apexStepSimulation(0.268, 'RIDER_POV');  // freeze + seek + re-render
 window.apexScrubTo(0.50);
+window.apexSetCamera('CHASE_CAM');
+window.__coasterLoaded;                          // true once the GLB is in the scene
 ```
+
+Any frame can also be deep-linked, which is how `screenshots/` was captured:
+
+```
+?t=0.275&cam=RIDER_POV&dpr=2          # freeze at a spline position, retina capture
+?t=0.02&cam=FREE&px=-13&py=4&pz=9&tx=-17.9&ty=1.8&tz=1.2&fov=52
+```
+
+`?t=` also pins quality (the adaptive ladder is disabled) so captures are reproducible.
 
 ---
 
@@ -160,7 +174,7 @@ blender --background --python blender/build_coaster.py
 # → /tmp/apex_coaster.glb  +  /tmp/apex_telemetry.json
 ```
 
-The script prints its own manifest, e.g. `BENCHMARK_BAKE_COMPLETE: 12 objects, 44386 faces, 560 frames`.
+The script prints its own manifest, e.g. `APEX_MANIFEST {"faces": 83833, "tris": 196088, "objects": 17, ...}`.
 
 `blender/render_studio_stills.py` is an optional offline path that sets up a Cycles studio with
 area lights for high-resolution stills — useful if you want marketing frames rather than the
@@ -191,7 +205,7 @@ why the deck and the track read as one instrument rather than two pasted halves.
 .
 ├── index.html                     # the whole app
 ├── assets/
-│   ├── apex_coaster.glb           # 44,386-face Blender export
+│   ├── apex_coaster.glb           # 83,833-face Blender export (196k tris, 6.3 MB)
 │   └── apex_telemetry.json        # 560-frame kinematic + biometric sidecar
 ├── design/
 │   ├── DESIGN.md                  # design tokens (lint-clean)
@@ -213,8 +227,11 @@ why the deck and the track read as one instrument rather than two pasted halves.
 - `apex_telemetry.json` is the single source of truth. If you change the spline, regenerate the
   sidecar too — the renderer trusts the sidecar for orientation, so a stale sidecar will drive the
   train through the track.
-- Tested in Chromium and Safari. `MeshStandardMaterial` + PMREM environment reflections are
-  required for the steel to read as steel; disabling `scene.environment` flattens every rail.
+- Quality is adaptive: if the live frame rate sits under ~52 fps the stage first trims the pixel
+  ratio, then drops the bloom pass. Fixed captures (`?t=`) never adapt.
+- Tested in Chromium and Safari. The stage renders through an MSAA render target, a 2048² PCFSoft
+  shadow map from a single raking key light, thresholded bloom (only the emissives glow) and a
+  generated studio environment; disabling `scene.environment` flattens every rail.
 - No tracking, no analytics, no external API calls at runtime. Fonts are the only network
   dependency.
 
