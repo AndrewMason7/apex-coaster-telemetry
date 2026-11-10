@@ -4,6 +4,22 @@
 
 **A real-time 3D roller-coaster telemetry cockpit — Blender-baked geometry, Stitch-designed UI, live-synced at 60 fps.**
 
+[![Live demo](https://img.shields.io/badge/%E2%96%B6_LIVE_DEMO-andrewmason7.github.io-06B6D4?style=for-the-badge&labelColor=09090B)](https://andrewmason7.github.io/apex-coaster-telemetry/)
+[![Repo](https://img.shields.io/badge/GitHub-apex--coaster--telemetry-F43F5E?style=for-the-badge&logo=github&labelColor=09090B)](https://github.com/AndrewMason7/apex-coaster-telemetry)
+
+[![Three.js](https://img.shields.io/badge/Three.js-r170-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
+[![Blender](https://img.shields.io/badge/Blender-5.3-EA7600?style=flat-square&logo=blender&logoColor=white)](https://www.blender.org)
+[![Google Stitch](https://img.shields.io/badge/Google_Stitch-UI_%2B_tokens-4285F4?style=flat-square&logo=google&logoColor=white)](https://stitch.withgoogle.com)
+[![WebGL](https://img.shields.io/badge/WebGL-2.0-990000?style=flat-square&logo=webgl&logoColor=white)](#)
+[![design.md](https://img.shields.io/badge/%40google%2Fdesign.md-0_errors_0_warnings-10B981?style=flat-square)](#design-system)
+[![License](https://img.shields.io/badge/license-MIT-F59E0B?style=flat-square)](LICENSE)
+
+[![faces](https://img.shields.io/badge/geometry-44%2C386_faces-8B5CF6?style=flat-square)](#track-geometry)
+[![frames](https://img.shields.io/badge/telemetry-560_frames-06B6D4?style=flat-square)](#how-it-works)
+[![cars](https://img.shields.io/badge/train-5_articulated_cars-F43F5E?style=flat-square)](#how-it-works)
+[![cameras](https://img.shields.io/badge/cameras-4_modes-F59E0B?style=flat-square)](#controls)
+[![build](https://img.shields.io/badge/build-none_%E2%80%94_plain_HTML-10B981?style=flat-square)](#run-it)
+
 `44,386 faces` · `560 telemetry frames` · `5 articulated cars` · `4 camera modes` · `banked 3D spline`
 
 </div>
