@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Blender
+*.blend1
+*.blend2
+
+# Build / capture scratch
+/tmp/
+dist/
+node_modules/
+
+# Local renders
+render-*.png
+cycles_*.png
